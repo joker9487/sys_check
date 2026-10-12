@@ -1,0 +1,8 @@
+[INFO] system start
+[ERROR] disk full
+
+[WARN] cpu temp high
+[INFO] donejiasjdias
+hello world
+
+ 
