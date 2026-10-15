@@ -1,4 +1,5 @@
 import json
+import logging
 class LogSummary:
     def __init__(self):
         self.counts={}
@@ -32,5 +33,5 @@ def read_lines(path):
                     list_return.append(s)
         return list_return
     except FileNotFoundError:
-        print("找不到檔案",path)
+        logging.error("找不到檔案",path)
         return list_return

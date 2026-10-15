@@ -2,6 +2,7 @@ from log_summary import LogSummary
 from disk_check import check_disk
 from config import load_config
 import argparse
+import logging
 
 def parse_args():
     parser = argparse.ArgumentParser(description="系統檢查工具")
@@ -10,37 +11,39 @@ def parse_args():
     return parser.parse_args()
 
 def run_disk_check(paths, limit):
-    disk_info_d ={}
-    use_level="OK"
-    use_warn=""
-    for disk_name in paths:
-        disk_info=check_disk(disk_name,limit)
-        if (disk_info is None):
-            print(f"[ERR]  {disk_name} 找不到路徑")
+    results = {}
+    for path in paths:
+        info = check_disk(path, limit)
+        if info is None:
+            logging.error(f"  {path} 找不到路徑")
             continue
-        if (not disk_info['ok'] ):
-            use_level="WARN"
-            use_warn=F"，超過上限 {disk_info['limit']}%"
+        if info["ok"]:
+            logging.info(f"   {path} 使用率 {info['percent']}%")
         else:
-            #沒超過
-            use_level="OK"
-            use_warn=""
-        print(f"[{use_level}]   {disk_info['path']} 使用率 {disk_info['percent']}%{use_warn}")
-
-        #儲存資料
-        disk_info_d[disk_name]=disk_info
-    return disk_info_d
+            logging.warning(f" {path} 使用率 {info['percent']}%，超過上限 {limit}%")
+        results[path] = info
+    return results
 
 
 def run_log_summary(log_path):
     summary = LogSummary()
     summary.add_files(log_path)
-    print(summary.counts)        
-    print("total line:",summary.total())       
-    print("skipped line:",summary.skipped)
+    logging.info(f"log 統計：{summary.counts}")
+    logging.info(f"總行數：{summary.total()}")
+    if summary.skipped > 0:
+        logging.warning(f"有 {summary.skipped} 行格式不符，已略過")
+        
     summary.save("summary.json")
     return summary
 
+logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[
+            logging.FileHandler("sys_check.log", encoding="utf-8"),  # 存檔
+            logging.StreamHandler(),                                 # 印畫面
+        ],
+    )
 
 def main():
     args = parse_args()
@@ -56,6 +59,11 @@ def main():
 
     run_disk_check(config["disk_paths"], limit)
     run_log_summary(args.log)
+
+
+    
+
+
 
 
 if __name__ == "__main__":
