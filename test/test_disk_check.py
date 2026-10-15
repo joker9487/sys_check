@@ -20,4 +20,4 @@ def test_上限判斷():
 
 def test_路徑不存在():
     desk_test = check_disk("Z:/",80)
-    assert desk_test 
+    assert desk_test is None
