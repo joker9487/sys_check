@@ -1,7 +1,7 @@
 import pytest
 from disk_check import check_disk
 
-PATH = "C:/"   
+PATH = "."   
 
 def test_回傳欄位():
     desk_test= check_disk(PATH,80)
