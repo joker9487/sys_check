@@ -1,0 +1,11 @@
+.git/
+.github/
+__pycache__/
+.pytest_cache/
+test/
+sys_check.log
+summary.json
+Dockerfile
+.dockerignore
+*.log
+.gitignore

@@ -4,6 +4,10 @@ from config import load_config
 import argparse
 import logging
 
+
+import os
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description="系統檢查工具")
     parser.add_argument("--log", default="test.txt", help="要分析的 log 檔")
@@ -32,20 +36,26 @@ def run_log_summary(log_path):
     logging.info(f"總行數：{summary.total()}")
     if summary.skipped > 0:
         logging.warning(f"有 {summary.skipped} 行格式不符，已略過")
-        
-    summary.save("summary.json")
+
+    
+    summary.save("output/summary.json")
     return summary
 
-logging.basicConfig(
+
+
+def main():
+    #建輸出資料夾
+    os.makedirs("output", exist_ok=True)
+    
+    logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler("sys_check.log", encoding="utf-8"),  # 存檔
+            logging.FileHandler("output/sys_check.log", encoding="utf-8"),  # 存檔
             logging.StreamHandler(),                                 # 印畫面
         ],
     )
 
-def main():
     args = parse_args()
     config = load_config("config.json")
     if config is None:

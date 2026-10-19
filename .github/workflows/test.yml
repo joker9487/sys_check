@@ -7,6 +7,10 @@ jobs:
     runs-on: ubuntu-latest      # 借一台 Ubuntu
     steps:
       - uses: actions/checkout@v4          # 1. 把 repo 抓下來
+      #docker 
+      - run: docker build -t sys_check .
+      - run: docker run --rm -v "$PWD/config.docker.json:/app/config.json" sys_check
+
       - uses: actions/setup-python@v5      # 2. 裝 Python
         with:
           python-version: "3.13"
