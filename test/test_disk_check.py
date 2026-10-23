@@ -18,6 +18,6 @@ def test_上限判斷():
     desk_test = check_disk(PATH,0)
     assert not desk_test["ok"]
 
-def test_路徑不存在():
-    desk_test = check_disk("Z:/",80)
+def test_路徑不存在(tmp_path):
+    desk_test = check_disk(str(tmp_path / "not_exist"),80)
     assert desk_test is None

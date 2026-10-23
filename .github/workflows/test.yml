@@ -1,18 +1,21 @@
 name: tests
 
-on: [push, pull_request]        
+on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest      # 借一台 Ubuntu
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4          # 1. 把 repo 抓下來
-      #docker 
-      - run: docker build -t sys_check .
-      - run: docker run --rm -v "$PWD/config.docker.json:/app/config.json" sys_check
-
-      - uses: actions/setup-python@v5      # 2. 裝 Python
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: pip install pytest            # 3. 裝 pytest
-      - run: python -m pytest -v           # 4. 跑測試
+      - run: pip install pytest
+      - run: python -m pytest -v
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t sys_check .
+      - run: docker run --rm -v "$PWD/config.docker.json:/app/config.json" sys_check

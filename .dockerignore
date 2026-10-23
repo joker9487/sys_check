@@ -9,3 +9,4 @@ Dockerfile
 .dockerignore
 *.log
 .gitignore
+output/
