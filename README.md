@@ -18,6 +18,7 @@ python main.py -h
 | --- | --- | --- |
 | `--log` | 要分析的 log 檔 | `test.txt` |
 | `--limit` | 磁碟上限（%） | 沒給就用 config 的 `disk_limit` |
+| `--output` | summary的存檔路徑 | 沒給就用 output/summary.json |
 
 ## 設定檔 config.json
 ```json
@@ -62,7 +63,7 @@ python -m pytest -v
 
 ## 專案結構
 ```
-sys-check/
+sys_check/
 ├── main.py                 # 進入點：解析參數、設定 logging、執行檢查
 ├── config.py               # load_config()：讀 JSON 設定檔
 ├── disk_check.py           # check_disk()：取得磁碟用量並判斷是否超過上限
