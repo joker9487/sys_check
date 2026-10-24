@@ -12,6 +12,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="系統檢查工具")
     parser.add_argument("--log", default="test.txt", help="要分析的 log 檔")
     parser.add_argument("--limit", type=int, help="磁碟上限（%%），沒給就用 config")
+    parser.add_argument("--output",default="output/summary.json",help="summary 存檔位置")
     return parser.parse_args()
 
 def run_disk_check(paths, limit):
@@ -29,7 +30,7 @@ def run_disk_check(paths, limit):
     return results
 
 
-def run_log_summary(log_path):
+def run_log_summary(log_path,out_path):
     summary = LogSummary()
     summary.add_files(log_path)
     logging.info(f"log 統計：{summary.counts}")
@@ -37,8 +38,8 @@ def run_log_summary(log_path):
     if summary.skipped > 0:
         logging.warning(f"有 {summary.skipped} 行格式不符，已略過")
 
-    
-    summary.save("output/summary.json")
+    run_log_summary
+    summary.save(out_path)
     return summary
 
 
@@ -68,7 +69,7 @@ def main():
         limit = config["disk_limit"]
 
     run_disk_check(config["disk_paths"], limit)
-    run_log_summary(args.log)
+    run_log_summary(args.log,args.output)
 
 
     
