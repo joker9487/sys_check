@@ -38,7 +38,7 @@ def run_log_summary(log_path,out_path):
     if summary.skipped > 0:
         logging.warning(f"有 {summary.skipped} 行格式不符，已略過")
 
-    run_log_summary
+    
     summary.save(out_path)
     return summary
 
